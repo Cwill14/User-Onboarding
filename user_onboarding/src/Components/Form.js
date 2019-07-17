@@ -1,8 +1,9 @@
 import React from 'react';
 import { withFormik, Form, Field } from 'formik';
 import * as Yup from 'yup';
+import axios from 'axios';
 
-function UserForm({ values, errors, touched }) {
+function UserForm({ values, errors, touched, isSubmitting }) {
     return (
         <Form className="user-form" >
             <div className="field">
@@ -23,8 +24,9 @@ function UserForm({ values, errors, touched }) {
             <div className="field">
                 <label htmlFor="tos">I accept Terms of Service</label>
                 <Field type="checkbox" name="tos" id="tos" checked={values.tos}/>
+                {touched.tos && errors.tos && <p>{errors.tos}</p>}
             </div>
-            <button>Submit</button>
+            <button type="submit" disabled={isSubmitting}>Submit</button>
         </Form>
     );
 };
@@ -50,11 +52,29 @@ const FormikUserForm = withFormik({
             .required("Email is required"),
         password: Yup.string()
             .min(8, "Password must be 8 characters or longer")
-            .required("Password is required")
+            .required("Password is required"),
+        tos: Yup
+            .boolean()
+            .oneOf([true], 'Must Accept Terms and Conditions')
     }),
 
-    handleSubmit(values) {
-        console.log(values);
+    handleSubmit(values, { resetForm, setErrors, setSubmitting }) {
+       if (values.email === "waffle@syrup.com") {
+           setErrors({ email: "That email is already taken" });
+       } else {
+           axios
+              .post("https://reqres.in/api/users", values)
+              .then(res => {
+                  console.log(res.data);
+                  resetForm();
+                  setSubmitting(false);
+                  window.alert(res.data);
+              })
+              .catch(err => {
+                  console.log(err);
+                  setSubmitting(false);
+              })
+       }
     }
 
 })(UserForm);
