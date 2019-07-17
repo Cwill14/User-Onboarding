@@ -68,7 +68,7 @@ const FormikUserForm = withFormik({
                   console.log(res.data);
                   resetForm();
                   setSubmitting(false);
-                  window.alert(res.data);
+                  window.alert(`Name: ${res.data.name}, Email: ${res.data.email}`);
               })
               .catch(err => {
                   console.log(err);
