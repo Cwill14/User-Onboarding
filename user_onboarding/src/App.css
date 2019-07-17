@@ -8,3 +8,9 @@
 .field {
   margin: 1rem;
 }
+p {
+  color: red;
+  font-size: 0.66rem;
+  margin: 0 auto;
+  text-align: center;
+}
