@@ -22,6 +22,14 @@ function UserForm({ values, errors, touched, isSubmitting }) {
                 {touched.password && errors.password && <p>{errors.password}</p>}
             </div>
             <div className="field">
+                <label htmlFor="dropdown">Dropdown: </label>
+                <Field component="select" name="dropdown" id="dropdown">
+                    <option value="one">One</option>
+                    <option value="two">Two</option>
+                    <option value="three">Three</option>
+                </Field>
+            </div>
+            <div className="field">
                 <label htmlFor="tos">I accept Terms of Service</label>
                 <Field type="checkbox" name="tos" id="tos" checked={values.tos}/>
                 {touched.tos && errors.tos && <p>{errors.tos}</p>}
@@ -33,12 +41,13 @@ function UserForm({ values, errors, touched, isSubmitting }) {
 
 const FormikUserForm = withFormik({
     
-    mapPropsToValues({ name, email, password, tos }) {
+    mapPropsToValues({ name, email, password, tos, dropdown }) {
         return {
             name: name || "",
             email: email || "",
             password: password || "",
-            tos : tos || false
+            tos : tos || false,
+            dropdown: dropdown || "one"
         };
     },
 
